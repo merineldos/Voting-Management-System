@@ -213,7 +213,7 @@ else if (isset($_POST['login_button']))
 			{
 				$_SESSION['key']=$data['adminkey'];
 				?>
-				<script> location.assign("admin/index.php");</script>
+				<script> location.assign("admin/index.php?homepage=1");</script>
 				<?php
 			}
 			else 
