@@ -22,3 +22,10 @@
 {
     color: #67C232;
 }
+.candidate_photo
+{
+    width:80px;
+    height:80px;
+    border:5px solid #67C232;
+    border-radius:100%;
+}
