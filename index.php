@@ -18,7 +18,7 @@
             <div class="user_card">
                 <div class="d-flex justify-content-center">
                     <div class="brand_logo_container">
-                        <img src="./assets/images/loginlogo2.jpg" class="brand_logo" alt="Logo">
+                        <img src="./assets/images/loginlogo2 - Copy.jpg" class="brand_logo" alt="Logo">
                     </div>
                 </div>
 

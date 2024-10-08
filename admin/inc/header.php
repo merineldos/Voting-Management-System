@@ -22,7 +22,7 @@ if (!isset($_SESSION['user_role']) || $_SESSION['user_role'] != 'admin') {
         
         <div class="row bg-black text-black " >
             <div class="col-1">
-                <img src="../assets/images/logo.gif" alt="logo" width="80px" />
+                <img src="../assets/images/loginlogo2 - Copy.jpg" alt="logo" width="80px" />
             </div>
             <div class="col-11 my-auto">
                 <h3 style="margin: 0;">ONLINE VOTING MANAGEMENT SYSTEM - <small> Welcome <?php echo $_SESSION['username']; ?></small></h3>
