@@ -98,7 +98,8 @@
                   $allowed_candidates = $row['no_of_candidates'];
                   $fetchingCandidate = mysqli_query($db, "SELECT * FROM candidate_details WHERE election_id='$election_id'") or die(mysqli_error($db));
                   $added_candidates = mysqli_num_rows($fetchingCandidate);
-                  if ($added_candidates < $allowed_candidates) {
+                  if ($added_candidates < $allowed_candidates) 
+                  {
                     ?>
                     <option value="<?php echo $election_id; ?>"><?php echo $election_name; ?></option>
                     <?php
