@@ -1,193 +1,146 @@
+<?php
+
+
+
+if (isset($_POST['add_candidatebtn'])) {
+    $election_id = mysqli_real_escape_string($db, $_POST['election_id']);
+    $candidate_name = mysqli_real_escape_string($db, $_POST['candidate_name']);
+    $candidate_details = mysqli_real_escape_string($db, $_POST['candidate_details']);
+
+    $inserted_by = $_SESSION['username'];
+    $inserted_on = date("Y-m-d");
+    $target_folder = "assets/images/candidate_photos/";
+    $candidate_photo = $target_folder . rand(111111111, 999999999) . $_FILES['candidate_photo']['name'];
+    $candidate_photo_tmp_name = $_FILES['candidate_photo']['tmp_name'];
+    $candidate_photo_type = strtolower(pathinfo($candidate_photo, PATHINFO_EXTENSION));
+    $allowed_types = array("jpg", "jpeg", "png");
+    $image_size = $_FILES['candidate_photo']['size'];
+
+    if ($image_size < 2000000) {
+        if (in_array($candidate_photo_type, $allowed_types)) {
+            if (move_uploaded_file($candidate_photo_tmp_name, $candidate_photo)) {
+                mysqli_query($db, "INSERT INTO candidate_details (election_id, candidate_name, candidate_details, candidate_photo, inserted_by, inserted_on)
+                VALUES ('$election_id', '$candidate_name', '$candidate_details', '$candidate_photo', '$inserted_by', '$inserted_on')") 
+                or die(mysqli_error($db));
+                echo "<script>location.href='index.php?AddCandidatePage=1';</script>";
+            } else {
+                echo "<script>alert('Image Upload Failed! Please try again.');</script>";
+            }
+        } else {
+            echo "<script>alert('Invalid File Type! Only JPG, JPEG, PNG allowed.');</script>";
+        }
+    } else {
+        echo "<script>alert('Image size exceeds the maximum allowed size (2MB).');</script>";
+    }
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Add Candidate</title>
-
-  <!-- Bootstrap CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" />
-  
-  <!-- Animate.css for animations -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
-
-  <style>
-    .add-candidate-form, 
-    .candidate-details-table {
-      background: #f8f9fa;
-      border-radius: 15px;
-      transition: transform 0.3s ease-in-out;
-    }
-
-    .add-candidate-form:hover, 
-    .candidate-details-table:hover {
-      transform: translateY(-10px);
-    }
-
-    table img {
-      border-radius: 50%;
-      transition: transform 0.3s ease;
-    }
-
-    table img:hover {
-      transform: scale(1.2);
-    }
-
-    .btn-warning, 
-    .btn-danger {
-      transition: background-color 0.3s ease;
-    }
-
-    .btn-warning:hover {
-      background-color: #ffcc00;
-    }
-
-    .btn-danger:hover {
-      background-color: #ff3300;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Candidate</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 </head>
 <body>
-  <?php
-  if (isset($_GET['added'])) {
-    ?>
-    <div class="alert alert-success alert-dismissible fade show animate__animated animate__fadeInDown" role="alert">
-      Candidate Added Successfully!
-      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-    <?php
-  } else if (isset($_GET['largeFile'])) {
-    ?>
-    <div class="alert alert-danger alert-dismissible fade show animate__animated animate__shakeX" role="alert">
-      Candidate Image is too large (max 2MB). Please upload a smaller file.
-      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-    <?php
-  } else if (isset($_GET['InvalidFile'])) {
-    ?>
-    <div class="alert alert-danger alert-dismissible fade show animate__animated animate__shakeX" role="alert">
-      Invalid File Type. Only JPG, JPEG, and PNG allowed.
-      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-    <?php
-  } else if (isset($_GET['failed'])) {
-    ?>
-    <div class="alert alert-danger alert-dismissible fade show animate__animated animate__shakeX" role="alert">
-      Image Uploading failed! Please try again.
-      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-    <?php
-  }
-  ?>
-
-  <div class="container mt-5">
+<div class="container mt-5">
     <div class="row">
-      <div class="col-md-6 mb-5 shadow-lg p-4 rounded animate__animated animate__fadeInLeft add-candidate-form bg-white">
-        <h3 class="mb-4 text-center text-primary">Add New Candidate</h3>
-        <form method="POST" enctype="multipart/form-data">
-          <div class="form-group mb-3">
-            <select class="form-control form-control-lg" name="election_id" required>
-              <option value="">Select Election</option>
-              <?php
-              $fetchingElections = mysqli_query($db, "SELECT * FROM elections") or die(mysqli_error($db));
-              $isAnyElectionAdded = mysqli_num_rows($fetchingElections);
-              if ($isAnyElectionAdded > 0) {
-                while ($row = mysqli_fetch_assoc($fetchingElections)) {
-                  $election_id = $row['id'];
-                  $election_name = $row['election_topic'];
-                  $allowed_candidates = $row['no_of_candidates'];
-                  $fetchingCandidate = mysqli_query($db, "SELECT * FROM candidate_details WHERE election_id='$election_id'") or die(mysqli_error($db));
-                  $added_candidates = mysqli_num_rows($fetchingCandidate);
-                  if ($added_candidates < $allowed_candidates) 
-                  {
-                    ?>
-                    <option value="<?php echo $election_id; ?>"><?php echo $election_name; ?></option>
+        <!-- Add New Candidate Form -->
+        <div class="col-md-5 mb-5 shadow p-4 rounded bg-light animate__animated animate__fadeInLeft">
+            <h3 class="mb-4 text-center text-success">Add New Candidate</h3>
+            <form id="addCandidateForm" method="POST" enctype="multipart/form-data">
+                <div class="mb-3">
+                    <select class="form-select" name="election_id" required>
+                        <option value="">Select Election</option>
+                        <?php
+                        $elections = mysqli_query($db, "SELECT * FROM elections");
+                        while ($row = mysqli_fetch_assoc($elections)) {
+                            echo "<option value='" . $row['id'] . "'>" . $row['election_topic'] . "</option>";
+                        }
+                        ?>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <input type="text" name="candidate_name" class="form-control" placeholder="Candidate Name" required />
+                </div>
+                <div class="mb-3">
+                    <textarea name="candidate_details" class="form-control" placeholder="Candidate Details" rows="3" required></textarea>
+                </div>
+                <div class="mb-3">
+                    <label for="candidatePhoto" class="form-label">Candidate Photo (Max 2MB, JPG, JPEG, PNG)</label>
+                    <input type="file" name="candidate_photo" class="form-control" required />
+                </div>
+                <div class="text-end">
+                    <button type="submit" name="add_candidatebtn" class="btn btn-success">Add Candidate</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Candidate List Table -->
+        <div class="col-md-7 mb-5 shadow p-4 rounded bg-light animate__animated animate__fadeInRight">
+            <h3 class="mb-4 text-center text-success">Candidate Details</h3>
+            <table class="table table-hover table-bordered">
+                <thead>
+                    <tr class="table-success">
+                        <th>S.No</th>
+                        <th>Photo</th>
+                        <th>Name</th>
+                        <th>Details</th>
+                        <th>Election</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="candidateTableBody">
                     <?php
-                  }
-                }
-              } else {
-                ?>
-                <option value="">Please Add Election First</option>
-                <?php
-              }
-              ?>
-            </select>
-          </div>
-          <div class="form-group mb-3">
-            <input type="text" name="candidate_name" class="form-control form-control-lg" placeholder="Candidate Name" required />
-          </div>
-          <div class="form-group mb-3">
-            <input type="file" name="candidate_photo" class="form-control form-control-lg" placeholder="Candidate Photo" required />
-            <small class="text-muted">Max file size: 2MB. Allowed types: JPG, JPEG, PNG.</small>
-          </div>
-          <div class="form-group mb-4">
-            <textarea name="candidate_details" class="form-control form-control-lg" placeholder="Candidate Details" rows="3" required></textarea>
-          </div>
-          <input type="submit" value="Add Candidate" name="add_candidatebtn" class="btn btn-primary btn-lg w-100" />
-        </form>
-      </div>
+                    $candidates = mysqli_query($db, "SELECT * FROM candidate_details");
+                    if (mysqli_num_rows($candidates) > 0) {
+                        $sno = 1;
+                        while ($row = mysqli_fetch_assoc($candidates)) {
+                            $election_id = $row['election_id'];
+                            $election_query = mysqli_query($db, "SELECT election_topic FROM elections WHERE id='$election_id'");
+                            $election_name = mysqli_fetch_assoc($election_query)['election_topic'];
 
-      <div class="col-md-6 mb-5 shadow-lg p-4 rounded bg-white animate__animated animate__fadeInRight candidate-details-table">
-        <h3 class="mb-4 text-center text-success">Candidate Details</h3>
-        <table class="table table-hover table-striped">
-          <thead class="table-success">
-            <tr>
-              <th scope="col">S.No</th>
-              <th scope="col">Photo</th>
-              <th scope="col">Name</th>
-              <th scope="col">Details</th>
-              <th scope="col">Election</th>
-              <th scope="col">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            <?php
-            $fetchingData = mysqli_query($db, "SELECT * FROM candidate_details") or die(mysqli_error($db));
-            $isAnyCandidateAdded = mysqli_num_rows($fetchingData);
-            if ($isAnyCandidateAdded > 0) {
-              $sno = 1;
-              while ($row = mysqli_fetch_assoc($fetchingData)) {
-                $election_id = $row['election_id'];
-                $fetchingElectionName = mysqli_query($db, "SELECT * FROM elections WHERE id='$election_id'") or die(mysqli_error($db));
-                $election_row = mysqli_fetch_assoc($fetchingElectionName);
-
-                if ($election_row) {
-                  $election_name = $election_row['election_topic'];
-                } else {
-                  $election_name = "Unknown Election";
-                }
-
-                $candidate_photo = $row['candidate_photo'];
-                ?>
-                <tr>
-                  <td><?php echo $sno++; ?></td>
-                  <td><img src="<?php echo $candidate_photo; ?>" alt="Candidate Photo" class="rounded-circle" style="width: 50px; height: 50px;" /></td>
-                  <td><?php echo $row['candidate_name']; ?></td>
-                  <td><?php echo $row['candidate_details']; ?></td>
-                  <td><?php echo $election_name; ?></td>
-                  <td>
-                    <a href='#' class="btn btn-sm btn-warning animate__animated animate__pulse">Edit</a>
-                    <a href='#' class="btn btn-sm btn-danger animate__animated animate__shakeX">Delete</a>
-                  </td>
-                </tr>
-                <?php
-              }
-            } else {
-              ?>
-              <tr>
-                <td colspan="6" class="text-center">No Candidates Added Yet</td>
-              </tr>
-              <?php
-            }
-            ?>
-          </tbody>
-        </table>
-      </div>
+                            echo "
+                                <tr>
+                                    <td>" . $sno++ . "</td>
+                                    <td><img src='" . $row['candidate_photo'] . "' class='rounded-circle' width='50' height='50'></td>
+                                    <td>" . $row['candidate_name'] . "</td>
+                                    <td>" . $row['candidate_details'] . "</td>
+                                    <td>" . $election_name . "</td>
+                                    <td>
+                                        <button class='btn btn-sm btn-warning'>Edit</button>
+                                        <button class='btn btn-sm btn-danger'>Delete</button>
+                                    </td>
+                                </tr>
+                            ";
+                        }
+                    } else {
+                        echo "<tr><td colspan='6' class='text-center'>No Candidates Added Yet</td></tr>";
+                    }
+                    ?>
+                </tbody>
+            </table>
+        </div>
     </div>
-  </div>
+</div>
 
-  <!-- Bootstrap JS and dependencies -->
-  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+<!-- Optional JavaScript -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        $('#addCandidateForm').on('submit', function(e) {
+            const fileInput = $('input[type="file"]')[0].files[0];
+            if (fileInput && fileInput.size > 2000000) {
+                alert('Image size exceeds the 2MB limit.');
+                e.preventDefault();
+            }
+        });
+    });
+</script>
+
 </body>
 </html>
