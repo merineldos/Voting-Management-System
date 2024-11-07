@@ -102,6 +102,8 @@ if (isset($_POST['add_candidatebtn'])) {
                             $election_id = $row['election_id'];
                             $election_query = mysqli_query($db, "SELECT election_topic FROM elections WHERE id='$election_id'");
                             $election_name = mysqli_fetch_assoc($election_query)['election_topic'];
+                            
+                          
 
                             echo "
                                 <tr>
