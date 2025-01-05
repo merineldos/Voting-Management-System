@@ -1,110 +1,115 @@
-<?php
-   require_once("inc/header.php");
-   require_once("inc/navigation.php");
-?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Voters Panel</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <style>
+    /* Background Styling */
+    body {
+      font-family: Arial, sans-serif;
+      background: #f2f3f5; /* Light grey background */
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
 
-<div class="row my-3">
-    <div class="col-12">
-        <h3> Voters Panel</h3>
+    /* Page Container */
+    .container {
+      max-width: 800px;
+    }
 
+    /* Table Container Styling */
+    .table-container {
+      background-color: #ffffff; /* White background */
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Table Styling */
+    .table thead th {
+      background-color: #4CAF50; /* Lighter green */
+      color: #fff;
+      text-align: center;
+    }
+    .table tbody tr {
+      background-color: #f5f5f5; /* Very light grey */
+      color: #333;
+    }
+    .table tbody tr td {
+      text-align: center;
+      vertical-align: middle;
+    }
+
+    /* Candidate Photo Styling */
+    .candidate_photo {
+      width: 50px;
+      height: 50px;
+      border-radius: 5px;
+      object-fit: cover;
+    }
+
+    /* Heading Styling */
+    h2 {
+      color: #2c3e50;
+      font-weight: bold;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    /* Action Button Styling */
+    .btn-vote {
+      background-color: #2196F3; /* Lighter blue */
+      color: #fff;
+      border: none;
+      padding: 8px 15px;
+      font-size: 14px;
+      font-weight: bold;
+      border-radius: 20px;
+      transition: background-color 0.3s;
+    }
+    .btn-vote:hover {
+      background-color: #1769AA; /* Darker blue on hover */
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h2>Election Details</h2>
+  <div class="table-container">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Photo</th>
+          <th>Candidate Details</th>
+          <th>Votes</th>
+         
+        </tr>
+      </thead>
+      <tbody>
         <?php
-          $fetchingActiveElection = mysqli_query($db, "SELECT * FROM elections WHERE status='active'") or die(mysqli_error($db));
-          $totalActiveElements = mysqli_num_rows($fetchingActiveElection);
+          // Sample Data (replace this with your database fetch loop)
+          $candidates = [
+            ["1", "../assets/images/electoral symbols/Screenshot 2024-11-08 124727.png", "Darsana Rajeev", "She is of political Party SDE", "20"],
+            ["2", "../assets/images/electoral symbols/Screenshot 2024-11-08 124715.png", "Aditya Mohan", "She is of political Party AFT", "30"],
+          ];
 
-          if ($totalActiveElements > 0) {
-              while ($data = mysqli_fetch_assoc($fetchingActiveElection)) {
-                  $election_id = $data['id'];
-                  $election_topic = $data['election_topic'];
-              }
-        ?>
-        
-        <table class="table">
-            <thead>
-                <tr>
-                    <th colspan="4" class="bg-green text-black">
-                        <h5>ELECTION TOPIC: <?php echo strtoupper($election_topic); ?></h5>
-                    </th>
-                </tr> 
-                <tr>
-                    <th>Photo</th> 
-                    <th>Candidate Details</th> 
-                    <th># of Votes</th> 
-                    <th>Action</th> 
-                </tr>    
-            </thead>  
-            <tbody>
-                
-                <?php
-                    $fetchingCandidates=mysqli_query($db,"select * from candidate_details where election_id='".$election_id ."'") or die(mysqli_error($db));
-
-                    
-                    while($candidateData=mysqli_fetch_assoc($fetchingCandidates))
-                    {
-                        $candidate_id=$candidateData['id'];
-                        $candidate_photo=$candidateData['candidate_photo'];
-
-                        $fetchingvotes=mysqli_query($db ,"select * from votings where candidate_id='".$candidate_id ."'")or die(mysqli_error($db));
-                        $totalvotes=mysqli_num_rows($fetchingvotes);
-
-                        
-    
-                        ?>    
-                        <tr>
-                            <td> 
-                                <img src="<?php echo $candidate_photo; ?>" class="candidate_photo">
-                            </td>
-                            <td> 
-                                <?php 
-                                    echo "<b>" . $candidateData['candidate_name'] . "</b><br/>" . $candidateData['candidate_details']; 
-                                ?>
-                            </td>
-                            <td>
-                                <?php echo $totalvotes; ?>
-                            </td>
-                            <td> 
-                                <button class="btn btn-md btn-success" 
-                                    onClick="Castvote(<?php echo $election_id; ?>,<?php echo $candidate_id; ?>,<?php echo $_SESSION['user_id']; ?>)">
-                                    Vote
-                                </button>
-                            </td>
-                        </tr> 
-                        <?php
-                        
-
-
-                    }
-                ?>
-            </tbody>  
-
-        </table> 
-        
-        <?php   
-          } else 
-          {
-              echo "No active election";
+          foreach ($candidates as $candidate) {
+            echo "<tr>
+              <td><img src='{$candidate[1]}' class='candidate_photo' alt='Candidate Photo'></td>
+              <td><b>{$candidate[2]}</b><br>{$candidate[3]}</td>
+              <td>{$candidate[4]}</td>
+              
+            </tr>";
           }
         ?>
-
-    </div>
+      </tbody>
+    </table>
+  </div>
 </div>
-<script>
-    const Castvote = (e_id, c_id, v_id) => {
-    $.ajax({
-        type: "POST",
-        url: "inc/ajaxCalls.php",
-        data: "e_id=" + e_id + "&c_id=" + c_id + "&v_id=" + v_id,
-        success: function(response) {
-            if (response == "success") {
-                location.assign("index.php?votecasted=1");
-            } else {
-                location.assign("index.php?votenotcasted=1");
-            }
-        }
-    });
-};
 
-</script>    
-
-<?php
-   require_once("inc/footer.php");
-?>
+<script src="https://code.jquery.com/jquery-3.5.1.min.

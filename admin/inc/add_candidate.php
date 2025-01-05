@@ -1,6 +1,7 @@
 <?php
 
 
+error_reporting(E_ERROR | E_PARSE);
 
 if (isset($_POST['add_candidatebtn'])) {
     $election_id = mysqli_real_escape_string($db, $_POST['election_id']);
