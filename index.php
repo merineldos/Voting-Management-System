@@ -1,141 +1,134 @@
 <!DOCTYPE html>
 <html>
-
 <head>
     <title>Login - Voting System</title>
-    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    
-    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
-    <link rel="stylesheet" href="assets/css/login.css">
-    <link rel="stylesheet" href="assets/css/style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: #f4f7f6;
+            height: 100vh;
+        }
+        .card {
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        .logo {
+            height: 100px;
+            width: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #fff;
+            box-shadow: 0 0 10px rgba(0,0,0,0.2);
+        }
+        .btn-primary {
+            background-color: #3498db;
+            border: none;
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .btn-primary:hover {
+            background-color: #2980b9;
+        }
+        .input-group-text {
+            background-color: #3498db;
+            color: white;
+            border: none;
+        }
+        a {
+            color: #3498db;
+            text-decoration: none;
+        }
+        a:hover {
+            color: #2980b9;
+        }
+    </style>
 </head>
 
 <body>
-    <div class="container h-100">
-        <div class="d-flex justify-content-center h-100">
-            <div class="user_card">
-                <div class="d-flex justify-content-center">
-                    <div class="brand_logo_container">
-                        <img src="./assets/images/loginlogo2 - Copy.jpg" class="brand_logo" alt="Logo">
-                    </div>
+    <div class="container d-flex justify-content-center align-items-center h-100">
+        <div class="card col-md-6 col-lg-4">
+            <div class="card-body p-4">
+                <div class="text-center mb-4">
+                    <img src="./assets/images/loginlogo2 - Copy.jpg" class="logo" alt="Logo">
+                    <h4 class="mt-3">Voting System</h4>
                 </div>
 
                 <?php
-                require_once('./admin/inc/config.php'); // Ensure this points to your database config file
+                require_once('./admin/inc/config.php'); // Database config file
 
                 if (isset($_GET['sign-up'])) {
                 ?>
-                    <div class="d-flex justify-content-center form_container">
-                        <form method="POST" action="">
-                            <div class="input-group mb-3">
-                                <div class="input-group-append">
-                                    <span class="input-group-text"><i class="fas fa-user"></i></span>
-                                </div>
-                                <input type="text" name="su_username" class="form-control input_user" placeholder="Username" required>
-                            </div>
-                            <div class="input-group mb-2">
-                                <div class="input-group-append">
-                                    <span class="input-group-text"><i class="fas fa-key"></i></span>
-                                </div>
-                                <input type="text" name="su_contact" class="form-control input_pass" placeholder="Contact" required>
-                            </div>
-                            <div class="input-group mb-2">
-                                <div class="input-group-append">
-                                    <span class="input-group-text"><i class="fas fa-key"></i></span>
-                                </div>
-                                <input type="password" name="su_password" class="form-control input_pass" placeholder="Password" required>
-                            </div>
-                            <div class="input-group mb-2">
-                                <div class="input-group-append">
-                                    <span class="input-group-text"><i class="fas fa-key"></i></span>
-                                </div>
-                                <input type="password" name="su_repassword" class="form-control input_pass" placeholder="ReType Password" required>
-                            </div>
-                            <div class="form-group">
-                                <div class="custom-control custom-checkbox">
-                                    <input type="checkbox" class="custom-control-input" id="customControlInline">
-                                    <label class="custom-control-label textwhite" for="customControlInline">Remember me</label>
-                                </div>
-                            </div>
-                            <div class="d-flex justify-content-center mt-3 login_container">
-                                <button type="submit" name="sign_up_button" class="btn login_btn">Sign Up</button>
-                            </div>
-                        </form>
-                    </div>
-                    <div class="mt-4">
-                        <div class="d-flex justify-content-center links textwhite">
-                             Already Created Account? <a href="index.php" class="ml-2">Sign In</a>
+                    <!-- Sign Up Form -->
+                    <form method="POST" action="">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text"><i class="fas fa-user"></i></span>
+                            <input type="text" name="su_username" class="form-control" placeholder="Username" required>
                         </div>
-                    </div>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                            <input type="text" name="su_contact" class="form-control" placeholder="Contact" required>
+                        </div>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                            <input type="password" name="su_password" class="form-control" placeholder="Password" required>
+                        </div>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                            <input type="password" name="su_repassword" class="form-control" placeholder="Confirm Password" required>
+                        </div>
+                        <div class="mb-3 form-check">
+                            <input type="checkbox" class="form-check-input" id="rememberMe">
+                            <label class="form-check-label" for="rememberMe">Remember me</label>
+                        </div>
+                        <button type="submit" name="sign_up_button" class="btn btn-primary">Create Account</button>
+                        <div class="text-center mt-3">
+                            Already have an account? <a href="index.php">Sign In</a>
+                        </div>
+                    </form>
                 <?php
                 } else {
                 ?>
-                    <div class="d-flex justify-content-center form_container">
-                        <form method="POST">
-                            <div class="input-group mb-3">
-                                <div class="input-group-append">
-                                    <span class="input-group-text"><i class="fas fa-user"></i></span>
-                                </div>
-                                <input type="text" name="username" class="form-control input_user" placeholder="Username" required/>
-                            </div>
-                            <div class="input-group mb-2">
-                                <div class="input-group-append">
-                                    <span class="input-group-text"><i class="fas fa-key"></i></span>
-                                </div>
-                                <input type="password" name="password" class="form-control input_pass" placeholder="Password" required/>
-                            </div>
-                            <div class="d-flex justify-content-center mt-3 login_container">
-                                <button type="submit" name="login_button" class="btn login_btn">Sign In</button>
-                            </div>
-                        </form>
-                    </div>
-                    <div class="mt-4">
-                        <div class="d-flex justify-content-center links">
-                            Don't have an account? <a href="index.php?sign-up=1" class="ml-2">Sign Up</a>
+                    <!-- Login Form -->
+                    <form method="POST">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text"><i class="fas fa-user"></i></span>
+                            <input type="text" name="username" class="form-control" placeholder="Username" required/>
                         </div>
-                        <div class="d-flex justify-content-center links textwhite">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                            <input type="password" name="password" class="form-control" placeholder="Password" required/>
+                        </div>
+                        <button type="submit" name="login_button" class="btn btn-primary">Sign In</button>
+                        <div class="text-center mt-3">
+                            Don't have an account? <a href="index.php?sign-up=1">Sign Up</a>
+                        </div>
+                        <div class="text-center mt-2">
                             <a href="?sign-up=1">Forgot your password?</a>
                         </div>
-                    </div>
+                    </form>
                 <?php
                 }
 
+                // Status messages
                 if (isset($_GET['registered'])) {
-                ?>
-                    <div class="bg-white text-success text-center my-3">
-                        <h3>Registration Successful</h3>
-                    </div>
-                <?php
+                    echo '<div class="alert alert-success text-center mt-3">Registration Successful</div>';
                 } else if (isset($_GET['invalid'])) {
-                ?>
-                    <div class="bg-white text-danger text-center my-3">
-                        <h3>Passwords do not match</h3>
-                    </div>
-                <?php
+                    echo '<div class="alert alert-danger text-center mt-3">Passwords do not match</div>';
                 } else if (isset($_GET['not_registered'])) {
-                ?>
-                    <div class="bg-white text-warning text-center my-3">
-                        <h3>Sorry You Are Not Registered</h3>
-                    </div>
-                <?php
+                    echo '<div class="alert alert-warning text-center mt-3">Sorry, you are not registered</div>';
                 } else if (isset($_GET['invalid_access'])) {
-                ?>
-                    <div class="bg-white text-danger text-center my-3">
-                        <h3>Invalid username or password</h3>
-                    </div>
-                <?php
+                    echo '<div class="alert alert-danger text-center mt-3">Invalid username or password</div>';
                 }
                 ?>
             </div>
         </div>
     </div>
 
-    <script src="assets/js/bootstrap.min.js"></script>
-    <script src="assets/js/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
-
 </html>
 
 <?php
