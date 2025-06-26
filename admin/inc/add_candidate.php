@@ -45,87 +45,279 @@ if (isset($_POST['add_candidatebtn'])) {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .main-container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            margin: 20px 0;
+            overflow: hidden;
+        }
+        
+        .form-card {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(15px);
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            margin-bottom: 20px;
+        }
+        
+        .table-card {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(15px);
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+        }
+        
+        .form-card h3, .table-card h3 {
+            color: #fff;
+            font-weight: 600;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+        
+        .form-control, .form-select {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            color: #fff;
+            padding: 12px 15px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+        
+        .form-control:focus, .form-select:focus {
+            background: rgba(255, 255, 255, 0.25);
+            border-color: rgba(255, 255, 255, 0.5);
+            box-shadow: 0 0 0 0.2rem rgba(255, 255, 255, 0.25);
+            color: #fff;
+        }
+        
+        .form-control::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        .form-select option {
+            background: #667eea;
+            color: #fff;
+        }
+        
+        .form-label {
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            border: none;
+            border-radius: 25px;
+            padding: 12px 30px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(238, 90, 36, 0.4);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(238, 90, 36, 0.6);
+            background: linear-gradient(45deg, #ee5a24, #ff6b6b);
+        }
+        
+        .table {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+        }
+        
+        .table thead th {
+            background: rgba(255, 255, 255, 0.2);
+            color: #fff;
+            font-weight: 600;
+            border: none;
+            padding: 15px;
+            text-align: center;
+        }
+        
+        .table tbody td {
+            background: rgba(255, 255, 255, 0.05);
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 12px;
+            text-align: center;
+            vertical-align: middle;
+        }
+        
+        .table tbody tr:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: scale(1.01);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-warning {
+            background: linear-gradient(45deg, #ffa726, #ff9800);
+            border: none;
+            border-radius: 20px;
+            padding: 6px 15px;
+            color: #fff;
+            font-weight: 500;
+            margin: 2px;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-warning:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(255, 152, 0, 0.4);
+            color: #fff;
+        }
+        
+        .btn-danger {
+            background: linear-gradient(45deg, #f44336, #e53935);
+            border: none;
+            border-radius: 20px;
+            padding: 6px 15px;
+            color: #fff;
+            font-weight: 500;
+            margin: 2px;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-danger:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(244, 67, 54, 0.4);
+            color: #fff;
+        }
+        
+        .candidate-photo {
+            border-radius: 50%;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .candidate-photo:hover {
+            transform: scale(1.1);
+            border-color: rgba(255, 255, 255, 0.6);
+        }
+        
+        .animate__animated {
+            animation-duration: 0.8s;
+        }
+        
+        @media (max-width: 768px) {
+            .form-card, .table-card {
+                padding: 20px;
+                margin-bottom: 15px;
+            }
+            
+            .table-responsive {
+                border-radius: 10px;
+            }
+        }
+    </style>
 </head>
 <body>
-<div class="container mt-5">
-    <div class="row">
-        <!-- Add New Candidate Form -->
-        <div class="col-md-5 mb-5 shadow p-4 rounded bg-light animate__animated animate__fadeInLeft">
-            <h3 class="mb-4 text-center text-success">Add New Candidate</h3>
-            <form id="addCandidateForm" method="POST" enctype="multipart/form-data">
-                <div class="mb-3">
-                    <select class="form-select" name="election_id" required>
-                        <option value="">Select Election</option>
-                        <?php
-                        $elections = mysqli_query($db, "SELECT * FROM elections");
-                        while ($row = mysqli_fetch_assoc($elections)) {
-                            echo "<option value='" . $row['id'] . "'>" . $row['election_topic'] . "</option>";
-                        }
-                        ?>
-                    </select>
+<div class="container mt-4">
+    <div class="main-container">
+        <div class="row p-4">
+            <!-- Add New Candidate Form -->
+            <div class="col-md-5 mb-4">
+                <div class="form-card animate__animated animate__fadeInLeft">
+                    <h3>Add New Candidate</h3>
+                    <form id="addCandidateForm" method="POST" enctype="multipart/form-data">
+                        <div class="mb-3">
+                            <select class="form-select" name="election_id" required>
+                                <option value="">Select Election</option>
+                                <?php
+                                $elections = mysqli_query($db, "SELECT * FROM elections");
+                                while ($row = mysqli_fetch_assoc($elections)) {
+                                    echo "<option value='" . $row['id'] . "'>" . $row['election_topic'] . "</option>";
+                                }
+                                ?>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <input type="text" name="candidate_name" class="form-control" placeholder="Candidate Name" required />
+                        </div>
+                        <div class="mb-3">
+                            <textarea name="candidate_details" class="form-control" placeholder="Candidate Details" rows="3" required></textarea>
+                        </div>
+                        <div class="mb-4">
+                            <label for="candidatePhoto" class="form-label">Candidate Photo (Max 2MB, JPG, JPEG, PNG)</label>
+                            <input type="file" name="candidate_photo" class="form-control" required />
+                        </div>
+                        <div class="text-center">
+                            <button type="submit" name="add_candidatebtn" class="btn btn-primary">Add Candidate</button>
+                        </div>
+                    </form>
                 </div>
-                <div class="mb-3">
-                    <input type="text" name="candidate_name" class="form-control" placeholder="Candidate Name" required />
-                </div>
-                <div class="mb-3">
-                    <textarea name="candidate_details" class="form-control" placeholder="Candidate Details" rows="3" required></textarea>
-                </div>
-                <div class="mb-3">
-                    <label for="candidatePhoto" class="form-label">Candidate Photo (Max 2MB, JPG, JPEG, PNG)</label>
-                    <input type="file" name="candidate_photo" class="form-control" required />
-                </div>
-                <div class="text-end">
-                    <button type="submit" name="add_candidatebtn" class="btn btn-success">Add Candidate</button>
-                </div>
-            </form>
-        </div>
+            </div>
 
-        <!-- Candidate List Table -->
-        <div class="col-md-7 mb-5 shadow p-4 rounded bg-light animate__animated animate__fadeInRight">
-            <h3 class="mb-4 text-center text-success">Candidate Details</h3>
-            <table class="table table-hover table-bordered">
-                <thead>
-                    <tr class="table-success">
-                        <th>S.No</th>
-                        <th>Photo</th>
-                        <th>Name</th>
-                        <th>Details</th>
-                        <th>Election</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody id="candidateTableBody">
-                    <?php
-                    $candidates = mysqli_query($db, "SELECT * FROM candidate_details");
-                    if (mysqli_num_rows($candidates) > 0) {
-                        $sno = 1;
-                        while ($row = mysqli_fetch_assoc($candidates)) {
-                            $election_id = $row['election_id'];
-                            $election_query = mysqli_query($db, "SELECT election_topic FROM elections WHERE id='$election_id'");
-                            $election_name = mysqli_fetch_assoc($election_query)['election_topic'];
-                            
-                          
-
-                            echo "
+            <!-- Candidate List Table -->
+            <div class="col-md-7 mb-4">
+                <div class="table-card animate__animated animate__fadeInRight">
+                    <h3>Candidate Details</h3>
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
                                 <tr>
-                                    <td>" . $sno++ . "</td>
-                                    <td><img src='" . $row['candidate_photo'] . "' class='rounded-circle' width='50' height='50'></td>
-                                    <td>" . $row['candidate_name'] . "</td>
-                                    <td>" . $row['candidate_details'] . "</td>
-                                    <td>" . $election_name . "</td>
-                                    <td>
-                                        <button class='btn btn-sm btn-warning'>Edit</button>
-                                        <button class='btn btn-sm btn-danger'>Delete</button>
-                                    </td>
+                                    <th>S.No</th>
+                                    <th>Photo</th>
+                                    <th>Name</th>
+                                    <th>Details</th>
+                                    <th>Election</th>
+                                    <th>Action</th>
                                 </tr>
-                            ";
-                        }
-                    } else {
-                        echo "<tr><td colspan='6' class='text-center'>No Candidates Added Yet</td></tr>";
-                    }
-                    ?>
-                </tbody>
-            </table>
+                            </thead>
+                            <tbody id="candidateTableBody">
+                                <?php
+                                $candidates = mysqli_query($db, "SELECT * FROM candidate_details");
+                                if (mysqli_num_rows($candidates) > 0) {
+                                    $sno = 1;
+                                    while ($row = mysqli_fetch_assoc($candidates)) {
+                                        $election_id = $row['election_id'];
+                                        $election_query = mysqli_query($db, "SELECT election_topic FROM elections WHERE id='$election_id'");
+                                        $election_name = mysqli_fetch_assoc($election_query)['election_topic'];
+                                        
+                                      
+
+                                        echo "
+                                            <tr>
+                                                <td>" . $sno++ . "</td>
+                                                <td><img src='" . $row['candidate_photo'] . "' class='candidate-photo' width='50' height='50'></td>
+                                                <td>" . $row['candidate_name'] . "</td>
+                                                <td>" . $row['candidate_details'] . "</td>
+                                                <td>" . $election_name . "</td>
+                                                <td>
+                                                    <button class='btn btn-sm btn-warning'>Edit</button>
+                                                    <button class='btn btn-sm btn-danger'>Delete</button>
+                                                </td>
+                                            </tr>
+                                        ";
+                                    }
+                                } else {
+                                    echo "<tr><td colspan='6' class='text-center'>No Candidates Added Yet</td></tr>";
+                                }
+                                ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>

@@ -1,5 +1,4 @@
 <?php
-session_start();
 require_once('../admin/inc/config.php');
 if (!isset($_SESSION['user_role']) || $_SESSION['user_role'] != 'voter') {
     echo "Not authorized"; // Add this line

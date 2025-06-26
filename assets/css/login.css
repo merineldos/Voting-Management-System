@@ -1,70 +1,166 @@
-	
-    body,
-    html {
-        margin: 0;
-        padding: 0;
-        height: 100%;
-        background:black !important;
-    }
-    .user_card {
-        height: 400px;
-        width: 350px;
-        margin-top: auto;
-        margin-bottom: auto;
-        background:white;
-        position: relative;
-        display: flex;
-        justify-content: center;
-        flex-direction: column;
-        padding: 10px;
-        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-        -webkit-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-        -moz-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-        border-radius: 5px;
+/* Modern Voting System Styles */
+body {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+    min-height: 100vh !important;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
+}
 
+.container {
+    backdrop-filter: blur(10px);
+}
+
+.card {
+    background: rgba(255, 255, 255, 0.95) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    border-radius: 20px !important;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(255, 255, 255, 0.1) !important;
+    backdrop-filter: blur(20px);
+}
+
+.card-body {
+    padding: 2.5rem !important;
+}
+
+.logo {
+    width: 80px !important;
+    height: 80px !important;
+    background: linear-gradient(135deg, #667eea, #764ba2) !important;
+    border: 3px solid rgba(255, 255, 255, 0.3) !important;
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3) !important;
+}
+
+h4 {
+    color: #4a5568 !important;
+    font-weight: 600 !important;
+    margin-top: 1rem !important;
+}
+
+.input-group {
+    margin-bottom: 1.5rem !important;
+}
+
+.input-group-text {
+    background: linear-gradient(135deg, #667eea, #764ba2) !important;
+    border: none !important;
+    color: white !important;
+    border-radius: 10px 0 0 10px !important;
+    width: 50px;
+    justify-content: center;
+}
+
+.form-control {
+    border: 2px solid #e2e8f0 !important;
+    border-left: none !important;
+    border-radius: 0 10px 10px 0 !important;
+    padding: 0.75rem 1rem !important;
+    font-size: 0.95rem !important;
+    transition: all 0.3s ease !important;
+}
+
+.form-control:focus {
+    border-color: #667eea !important;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1) !important;
+    background-color: #f8fafc !important;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #667eea, #764ba2) !important;
+    border: none !important;
+    border-radius: 10px !important;
+    padding: 0.75rem 1.5rem !important;
+    font-weight: 600 !important;
+    font-size: 1rem !important;
+    transition: all 0.3s ease !important;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4) !important;
+    background: linear-gradient(135deg, #5a67d8, #6b46c1) !important;
+}
+
+.btn-primary:active {
+    transform: translateY(0) !important;
+}
+
+.form-check-input:checked {
+    background-color: #667eea !important;
+    border-color: #667eea !important;
+}
+
+.form-check-label {
+    color: #4a5568 !important;
+    font-size: 0.9rem !important;
+}
+
+a {
+    color: #667eea !important;
+    text-decoration: none !important;
+    font-weight: 500 !important;
+    transition: all 0.3s ease !important;
+}
+
+a:hover {
+    color: #5a67d8 !important;
+    text-decoration: underline !important;
+}
+
+.text-center {
+    color: #4a5568 !important;
+}
+
+.alert {
+    border-radius: 10px !important;
+    border: none !important;
+    font-weight: 500 !important;
+}
+
+.alert-success {
+    background: linear-gradient(135deg, #48bb78, #38a169) !important;
+    color: white !important;
+}
+
+.alert-danger {
+    background: linear-gradient(135deg, #f56565, #e53e3e) !important;
+    color: white !important;
+}
+
+.alert-warning {
+    background: linear-gradient(135deg, #ed8936, #dd6b20) !important;
+    color: white !important;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .card-body {
+        padding: 2rem !important;
     }
-    .brand_logo_container {
-        position: absolute;
-        height: 170px;
-        width: 170px;
-        top: -75px;
-        border-radius: 50%;
-        background:white;
-        padding: 10px;
-        text-align: center;
+    
+    .logo {
+        width: 70px !important;
+        height: 70px !important;
     }
-    .brand_logo {
-        height: 150px;
-        width: 150px;
-        border-radius: 50%;
-        border: 2px solid white;
-    }
-    .form_container {
-        margin-top: 100px;
-    }
-    .login_btn {
-        width: 100%;
-        background: #68d388 !important;
-        color: white !important;
-    }
-    .login_btn:focus {
-        box-shadow: none !important;
-        outline: 0px !important;
-    }
-    .login_container {
-        padding: 0 2rem;
-    }
-    .input-group-text {
-        background: #68d388 !important;
-        color: white !important;
-        border: 0 !important;
-        border-radius: 0.25rem 0 0 0.25rem !important;
-    }
-    .input_user,
-    .input_pass:focus {
-        box-shadow: none !important;
-        outline: 0px !important;
-    }
-    .custom-checkbox .custom-control-input:checked~.custom-control-label::before {
-        background-color:#68d388 !important;
-    }
+}
+
+/* Animation for smooth transitions */
+* {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+/* Glass morphism effect for the card */
+.card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 20px;
+    padding: 1px;
+    background: linear-gradient(135deg, rgba(255,255,255,0.4), rgba(255,255,255,0.1));
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask-composite: exclude;
+    pointer-events: none;
+}
