@@ -59,112 +59,171 @@ if (!$elections) {
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Voter Panel</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <style>
-        /* Example minimal styles */
-        body { padding: 20px; background: #f9f9f9; }
-        .main-container { max-width: 900px; margin: auto; background: #fff; padding: 20px; border-radius: 6px; }
-        .header-section { margin-bottom: 20px; }
-        .candidate_photo { width: 60px; height: 60px; border-radius: 50%; object-fit: cover; }
-        .candidate-row { padding: 10px 0; border-bottom: 1px solid #ddd; }
-        .btn-vote { background-color: #007bff; color: white; }
-        .btn-vote:disabled { background-color: #6c757d; }
-        .vote-count { font-weight: bold; }
-        .election-card { margin-bottom: 30px; padding-bottom: 15px; border-bottom: 2px solid #007bff; }
-    </style>
-    <script src="https://kit.fontawesome.com/a076d05399.js"></script> <!-- for icons -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Voting Hub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../assets/css/voter.css">
 </head>
 <body>
-<div class="main-container">
-    <div class="header-section d-flex justify-content-between align-items-center">
-        <h3><i class="fas fa-vote-yea"></i> Welcome, <?= htmlspecialchars($username) ?>!</h3>
-        <a href="../logout.php" class="logout-btn btn btn-danger"><i class="fas fa-sign-out-alt"></i> Logout</a>
+    <div class="background-pattern"></div>
+    <div class="floating-particles">
+        <div class="particle" style="left: 10%; animation-delay: 0s;"></div>
+        <div class="particle" style="left: 20%; animation-delay: 2s;"></div>
+        <div class="particle" style="left: 30%; animation-delay: 4s;"></div>
+        <div class="particle" style="left: 40%; animation-delay: 6s;"></div>
+        <div class="particle" style="left: 50%; animation-delay: 8s;"></div>
+        <div class="particle" style="left: 60%; animation-delay: 10s;"></div>
+        <div class="particle" style="left: 70%; animation-delay: 12s;"></div>
+        <div class="particle" style="left: 80%; animation-delay: 14s;"></div>
+        <div class="particle" style="left: 90%; animation-delay: 16s;"></div>
     </div>
 
-    <?php if (!empty($success_message)): ?>
-        <div class="alert alert-success"><?= htmlspecialchars($success_message) ?></div>
-    <?php elseif (!empty($error_message)): ?>
-        <div class="alert alert-danger"><?= htmlspecialchars($error_message) ?></div>
-    <?php endif; ?>
+    <div class="container">
+        <div class="header">
+            <div class="welcome-section">
+                <div class="user-avatar">
+                    <?= strtoupper(substr($username, 0, 2)) ?>
+                </div>
+                <div class="welcome-text">
+                    <h1>Welcome, <?= htmlspecialchars($username) ?>!</h1>
+                    <p>Your voice matters. Make it count.</p>
+                </div>
+            </div>
+            <a href="../logout.php" class="logout-btn">
+                <i class="fas fa-sign-out-alt"></i>
+                Logout
+            </a>
+        </div>
 
-    <?php if (mysqli_num_rows($elections) > 0): ?>
-        <?php
-        $anyCandidates = false;
-        while ($election = mysqli_fetch_assoc($elections)):
-            $eid = $election['id'];
-            $candidatesQuery = "SELECT c.*, 
-                (SELECT COUNT(*) FROM votings v WHERE v.candidate_id = c.id) AS vote_count 
-                FROM candidate_details c WHERE c.election_id = '$eid' ORDER BY vote_count DESC";
-            $candidates = mysqli_query($db, $candidatesQuery);
-            if (!$candidates) {
-                die("Error fetching candidates: " . mysqli_error($db));
-            }
+        <?php if (!empty($success_message)): ?>
+            <div class="alert alert-success">
+                <i class="fas fa-check-circle"></i>
+                <?= htmlspecialchars($success_message) ?>
+            </div>
+        <?php elseif (!empty($error_message)): ?>
+            <div class="alert alert-danger">
+                <i class="fas fa-exclamation-triangle"></i>
+                <?= htmlspecialchars($error_message) ?>
+            </div>
+        <?php endif; ?>
 
-            $hasVotedResult = mysqli_query($db, "SELECT * FROM votings WHERE voters_id = '{$voter['id']}' AND election_id = '$eid'");
-            if (!$hasVotedResult) {
-                die("Error checking voting status: " . mysqli_error($db));
-            }
-            $hasVoted = mysqli_num_rows($hasVotedResult) > 0;
-        ?>
+        <?php if (mysqli_num_rows($elections) > 0): ?>
+            <?php
+            $anyCandidates = false;
+            while ($election = mysqli_fetch_assoc($elections)):
+                $eid = $election['id'];
+                $candidatesQuery = "SELECT c.*, 
+                    (SELECT COUNT(*) FROM votings v WHERE v.candidate_id = c.id) AS vote_count 
+                    FROM candidate_details c WHERE c.election_id = '$eid' ORDER BY vote_count DESC";
+                $candidates = mysqli_query($db, $candidatesQuery);
+                $hasVotedResult = mysqli_query($db, "SELECT * FROM votings WHERE voters_id = '{$voter['id']}' AND election_id = '$eid'");
+                $hasVoted = mysqli_num_rows($hasVotedResult) > 0;
+            ?>
             <div class="election-card">
-                <h2><?= htmlspecialchars($election['election_topic']) ?></h2>
-                <div><small>Starting: <?= date('M d, Y', strtotime($election['starting_date'])) ?> | Ending: <?= date('M d, Y', strtotime($election['ending_date'])) ?></small></div>
+                <h2 class="election-title"><?= htmlspecialchars($election['election_topic']) ?></h2>
+                <div class="election-dates">
+                    <i class="fas fa-calendar-alt"></i>
+                    <?= date('M d, Y', strtotime($election['starting_date'])) ?> - <?= date('M d, Y', strtotime($election['ending_date'])) ?>
+                </div>
 
                 <?php if (mysqli_num_rows($candidates) > 0): ?>
                     <?php $anyCandidates = true; ?>
-                    <?php while ($c = mysqli_fetch_assoc($candidates)): ?>
-                        <div class="candidate-row d-flex align-items-center">
-                            <img src="<?= htmlspecialchars($c['candidate_photo']) ?>" class="candidate_photo" onerror="this.src='../assets/images/default-avatar.png'">
-                            <div class="candidate-info ml-3">
-                                <div class="candidate-name"><?= htmlspecialchars($c['candidate_name']) ?></div>
-                                <div class="candidate-party"><?= htmlspecialchars($c['candidate_details']) ?></div>
-                                <span class="vote-count"><?= $c['vote_count'] ?> votes</span>
-                            </div>
-                            <div class="ml-auto">
-                                <?php if ($hasVoted): ?>
-                                    <button class="btn btn-vote" disabled><i class="fas fa-check"></i> Voted</button>
-                                <?php else: ?>
-                                    <form method="POST" onsubmit="return confirm('Vote for <?= htmlspecialchars(addslashes($c['candidate_name'])) ?>?');">
-                                        <input type="hidden" name="candidate_id" value="<?= $c['id'] ?>">
-                                        <input type="hidden" name="election_id" value="<?= $eid ?>">
-                                        <button type="submit" name="vote_candidate" class="btn btn-vote">
-                                            <i class="fas fa-vote-yea"></i> Vote
+                    <div class="candidates-grid">
+                        <?php while ($c = mysqli_fetch_assoc($candidates)): ?>
+                            <div class="candidate-card">
+                                <div class="candidate-info">
+                                    <img src="<?= htmlspecialchars($c['candidate_photo']) ?>" 
+                                         class="candidate-photo"
+                                         onerror="this.src='../assets/images/default-avatar.png'">
+                                    <div class="candidate-details">
+                                        <h3 class="candidate-name"><?= htmlspecialchars($c['candidate_name']) ?></h3>
+                                        <p class="candidate-description"><?= htmlspecialchars($c['candidate_details']) ?></p>
+                                        <div class="vote-count">
+                                            <i class="fas fa-chart-bar"></i>
+                                            <?= $c['vote_count'] ?> votes
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="vote-actions">
+                                    <?php if ($hasVoted): ?>
+                                        <button class="vote-btn voted-btn" disabled>
+                                            <i class="fas fa-check"></i>
+                                            Already Voted
                                         </button>
-                                    </form>
-                                <?php endif; ?>
+                                    <?php else: ?>
+                                        <form method="POST" onsubmit="return confirm('Are you sure you want to vote for <?= htmlspecialchars(addslashes($c['candidate_name'])) ?>?');">
+                                            <input type="hidden" name="candidate_id" value="<?= $c['id'] ?>">
+                                            <input type="hidden" name="election_id" value="<?= $eid ?>">
+                                            <button type="submit" name="vote_candidate" class="vote-btn">
+                                                <i class="fas fa-vote-yea"></i>
+                                                Cast Vote
+                                            </button>
+                                        </form>
+                                    <?php endif; ?>
+                                </div>
                             </div>
-                        </div>
-                    <?php endwhile; ?>
+                        <?php endwhile; ?>
+                    </div>
                 <?php else: ?>
-                    <div class="text-muted text-center">No candidates for this election yet.</div>
+                    <div class="empty-state">
+                        <i class="fas fa-users"></i>
+                        <h3>No Candidates Available</h3>
+                        <p>Candidates for this election haven't been announced yet.</p>
+                    </div>
                 <?php endif; ?>
             </div>
-        <?php endwhile; ?>
+            <?php endwhile; ?>
 
-        <?php if (!$anyCandidates): ?>
-            <div class="no-elections text-center mt-4">
-                <i class="fas fa-inbox fa-3x"></i>
-                <h3>No Candidates Available</h3>
-                <p>Please check back later.</p>
+            <?php if (!$anyCandidates): ?>
+                <div class="empty-state">
+                    <i class="fas fa-inbox"></i>
+                    <h3>No Candidates Available</h3>
+                    <p>Please check back later when candidates are announced.</p>
+                </div>
+            <?php endif; ?>
+        <?php else: ?>
+            <div class="empty-state">
+                <i class="fas fa-vote-yea"></i>
+                <h3>No Active Elections</h3>
+                <p>There are no active elections at the moment. Check back later!</p>
             </div>
         <?php endif; ?>
-    <?php else: ?>
-        <div class="no-elections text-center">
-            <i class="fas fa-inbox fa-3x"></i>
-            <h3>No Active Elections</h3>
-            <p>Check back later.</p>
-        </div>
-    <?php endif; ?>
-</div>
+    </div>
 
-<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-<script>
-    setTimeout(() => $('.alert').fadeOut('slow'), 5000);
-    $('.logout-btn').click(e => {
-        if (!confirm('Logout?')) e.preventDefault();
-    });
-</script>
+    <script>
+        // Auto-hide alerts after 5 seconds
+        setTimeout(() => {
+            const alerts = document.querySelectorAll('.alert');
+            alerts.forEach(alert => {
+                alert.style.opacity = '0';
+                alert.style.transform = 'translateY(-20px)';
+                setTimeout(() => alert.remove(), 300);
+            });
+        }, 5000);
+
+        // Logout confirmation
+        document.querySelector('.logout-btn').addEventListener('click', (e) => {
+            if (!confirm('Are you sure you want to logout?')) {
+                e.preventDefault();
+            }
+        });
+
+        // Add more floating particles dynamically
+        function createParticle() {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.animationDelay = Math.random() * 20 + 's';
+            particle.style.animationDuration = (Math.random() * 10 + 15) + 's';
+            document.querySelector('.floating-particles').appendChild(particle);
+            
+            setTimeout(() => particle.remove(), 25000);
+        }
+
+        // Create particles periodically
+        setInterval(createParticle, 3000);
+    </script>
 </body>
 </html>
